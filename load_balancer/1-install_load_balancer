@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+<<<<<<< HEAD
 # install load balancer
 
 
@@ -57,3 +58,15 @@ if [ "$(pgrep -c haproxy)" -le 0 ]; then
 else
 	sudo service haproxy restart
 fi
+=======
+# Install the load balancer
+
+
+sudo apt-get -y update
+sudo apt-get -y upgrade
+sudo apt-get -y install haproxy
+sudo sed -i 's/ENABLED=0/ENABLED=1/' /etc/default/haproxy
+sudo cp /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg.original
+sudo sed -i "$ a\listen 6016-lb-01\n\tbind *:80\n\tmode http\n\tbalance roundrobin\n\toption httpclose\n\toption forwardfor\n\tserver 6016-web-01 34.224.21.1:80 check\n\tserver 6016-web-02 54.83.77.172:80 check" /etc/haproxy/haproxy.cfg
+sudo service haproxy start
+>>>>>>> 11b345dd4a0b1b69cd20c0058e60245e92c42b8d
