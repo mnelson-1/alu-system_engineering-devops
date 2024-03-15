@@ -5,8 +5,8 @@ sudo apt-get update
 sudo apt-get install nginx
 sudo ufw "Nginx HTTP"
 
-echo ""Holberton School"" | sudo tee /var/www/html/index.html
+echo "Holberton School" | sudo tee /var/www/html/index.html
 
 sudo nginx -t
 
-sudo service nginx reload
+sudo service nginx restart
