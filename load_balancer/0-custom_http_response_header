@@ -1,11 +1,25 @@
 #!/usr/bin/env bash
 # Configure custom Nginx response header to track HTTP requests to web servers
-apt-get -y update
-apt-get -y install nginx
-echo "Holberton School" > /var/www/html/index.html
-sed -i '/^\tserver_name.*/a \\trewrite ^/redirect_me https://www.google.com/ permanent;' /etc/nginx/sites-available/default
-echo "Ceci n'est pas une page" > /var/www/html/404.html
-sed -i '/^\tserver_name.*/a \\terror_page 404 /404.html;\n\tlocation = /404.html {\n\troot /var/www/html/;\n\tinternal;\n\t}' /etc/nginx/sites-available/default
-sed -i '/^http {.*/a \\tadd_header X-Served-By '"${HOSTNAME}"';' /etc/nginx/nginx.conf
-sed -i '/^server {.*/a \\tadd_header X-Served-By '"${HOSTNAME}"';' /etc/nginx/sites-available/default
-service nginx restart
+
+# Updateing packages
+sudo apt-get update
+sudo apt-get install -y nginx
+
+echo "Holberton School" | sudo tee /var/www/html/index.html
+
+new_string="server_name _;\n\trewrite ^\/redirect_me https:\/\/github.com\/mnelson-1 permanent;"
+
+sudo sed -i "s/server_name _;/$new_string/" /etc/nginx/sites-enabled/default
+
+# Creating a custom erro page
+
+echo "Ceci n'est pas une page" | sudo tee /var/www/html/404.html
+
+# Custom HTTP response header
+sudo sed -i "server_name _;/a add_header X-Served-By $HOSTNAME;" /etc/nginx/sites-enabled/default
+
+# Test for syntax error
+sudo nginx -t
+
+# Restart nginx
+sudo service nginx restart
